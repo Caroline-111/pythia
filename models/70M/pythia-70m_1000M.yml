@@ -5,7 +5,7 @@
   "num_layers": 6,
   "hidden_size": 512,
   "num_attention_heads": 8,
-  "seq_length": 45,
+  "seq_length": 256, #! 45
   "max_position_embeddings": 2048,
   "pos_emb": "rotary",
   "rotary_pct": 0.25,
@@ -43,11 +43,11 @@
     "cpu_offload": false
   },
 
-  "train_micro_batch_size_per_gpu": 2, #!
+  "train_micro_batch_size_per_gpu": 16, #! 4
   "gas": 1,
   "data_impl": "mmap",
-  "data_path": "/home/caroline/gpt-neox/data/pile_00_text_document",
-  "num_workers": 1,
+  "data_path": "/home/caroline/gpt-watermark/gpt-neox/data/pile_00_text_document",
+  "num_workers": 5,
 
   "checkpoint_activations": false, #!
   "checkpoint_num_layers": 1,
@@ -61,7 +61,7 @@
 
   "fp16": {
     "fp16": true,
-    "enabled": true,  
+    "enabled": true,  # true
     "loss_scale": 0,
     "loss_scale_window": 1000,
     "initial_scale_power": 12,
@@ -69,24 +69,36 @@
     "min_loss_scale": 1
   },
 
-  "train_iters": 15700,
-  "lr_decay_iters": 15700,
+  "train_iters": 15414, #!
+  "lr_decay_iters": 15414,
   "distributed_backend": "nccl",
   "lr_decay_style": "cosine",
   "warmup": 0.01,
-  "checkpoint_factor": 1000,
-  "extra_save_iters": [15260, 15580],
-  "eval_interval": 100000,
-  "eval_iters": 10,
+  "checkpoint_factor": 50000,
+  "extra_save_iters": [15260],
+  "eval_interval": 100000, 
+  "eval_iters": 200, # 10, 
 
   "log_interval": 10,
   "steps_per_print": 10,
   "wall_clock_breakdown": true,
 
   "tokenizer_type": "HFTokenizer", 
-  "vocab-file": "/home/caroline/pythia/utils/20B_tokenizer.json",
+  "vocab-file": "/home/caroline/gpt-watermark/pythia/utils/20B_tokenizer.json",
 
-  "save": "checkpoints_1000M_Z0", #!
-  "load": "checkpoints_1000M_Z0", #!
+  "save": "checkpoints_1000M_Z0",
+  "load": "checkpoints_1000M_Z0",
   "checkpoint_validation_with_forward_pass": False,
+
+  # Robust Aggregator Parameters 
+  "worker_epoch": 3,
+  "worker_iter": 2,
+  "num_workers": 5,
+  "dirty_worker": 2,
+  "federated_rounds": 5,
+  "current_round": 1,
+  "grads_path": "/home/caroline/gpt-watermark/gpt-neox/saved_tensors",
+  "collect_clean_grads": false, 
+  "use_filtered_grads": True, 
+  "SGD_Normalize": True, 
 }
